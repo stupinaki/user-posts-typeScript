@@ -47,7 +47,7 @@ import {fetchUsers} from "@/api/fetchUsers";
 import {fetchComments} from "@/api/fetchComments";
 import Loader from "@/components/Loader.vue";
 import {addComment} from "@/api/addComment";
-
+// import { SnackbarProgrammatic as Snackbar } from 'buefy'
 
 
 export default Vue.extend({
@@ -55,6 +55,7 @@ export default Vue.extend({
   components: {
     Loader,
   },
+
   data() {
     return {
       post: [],
@@ -95,14 +96,10 @@ export default Vue.extend({
       this.$data.comment = '';
       this.$data.comments.push(newComment);
       this.$data.loading = false;
+      this.$buefy.snackbar.open(`Сообщение отправлено`)
     },
   }
 })
-
-
-
-
-
 
 
 // import {fetchPosts} from "@/api/fetchPosts";
