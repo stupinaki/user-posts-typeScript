@@ -16,7 +16,7 @@ const routes: Array<RouteConfig> = [
     path: '/post:id',
     name: 'Post',
     component: Post,
-  }
+  },
 ]
 
 const router = new VueRouter({

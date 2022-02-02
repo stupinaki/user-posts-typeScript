@@ -22,18 +22,19 @@
 </template>
 
 <script lang="ts">
+
 import Vue from "vue";
-import Component from "vue-class-component";
-import {Prop} from "vue-property-decorator";
-import {IUser} from "@/types/IUser";
 
 
-@Component
-export default class Select extends Vue {
-  private optionValue: string = '';
-
-  @Prop() users: IUser[] = [];
-}
+export default Vue.extend({
+  name: "Select",
+  props: {
+    users: { type: Array, default: ()=>{[]} },
+  },
+  data: () => ({
+    optionValue: null
+  }),
+})
 
 
 </script>

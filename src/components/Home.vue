@@ -22,13 +22,13 @@ import {fetchPosts} from "@/api/fetchPosts";
 import {fetchUsers} from "@/api/fetchUsers";
 import Loader from "@/components/Loader.vue";
 import Select from "@/components/Select.vue";
-import PostList from "@/components/PostsList.vue";
+import PostsList from "@/components/PostsList.vue";
 
 @Component({
   components: {
     Select,
     Loader,
-    PostList,
+    PostsList,
   }
 })
 export default class Home extends Vue{
