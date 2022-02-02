@@ -2,7 +2,7 @@ import {IComment} from "@/types/IComment";
 
 type TBody = {
     body: string,
-    postId: string,
+    postId: number,
     name: string,
 }
 

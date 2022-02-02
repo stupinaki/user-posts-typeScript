@@ -1,7 +1,7 @@
 <template>
   <ul class="list list-group-flush">
     <li
-      v-for="post in posts"
+      v-for="post in this.posts"
       :key="post.id"
       class="list-group-item"
     >
@@ -13,16 +13,16 @@
 </template>
 
 <script lang="ts">
-
-
-import {Component, Prop, Vue} from "vue-property-decorator";
+import {Prop} from "vue-property-decorator";
 import {IPost} from "@/types/IPost";
+import Component from "vue-class-component";
+import Vue from "vue";
+
 
 @Component
 export default class PostList extends Vue {
   @Prop() readonly posts: IPost[] = [];
 }
-
 
 </script>
 

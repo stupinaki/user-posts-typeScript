@@ -22,16 +22,19 @@
 </template>
 
 <script lang="ts">
-
-import {Component, Prop, Vue} from "vue-property-decorator";
+import Vue from "vue";
+import Component from "vue-class-component";
+import {Prop} from "vue-property-decorator";
 import {IUser} from "@/types/IUser";
+
 
 @Component
 export default class Select extends Vue {
-  private optionValue: null | string = null;
+  private optionValue: string = '';
 
-  @Prop() readonly users: IUser[] = [];
+  @Prop() users: IUser[] = [];
 }
+
 
 </script>
 

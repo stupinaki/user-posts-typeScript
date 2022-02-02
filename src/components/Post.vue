@@ -3,14 +3,14 @@
     <Loader v-if="loading"/>
     <template v-else>
       <div class="postUserName">
-        {{ user.username }}:
+        {{ $data.user.username }}:
       </div>
       <div class="postContent">
-        {{ post.body }}
+        {{ $data.post.body }}
       </div>
       <form>
         <input
-            v-model="comment"
+            v-model="$data.comment"
             class="comment"
             placeholder="Ваш комментарий"
             type="text"
@@ -25,51 +25,64 @@
       </form>
       <ul class="postComments list-group-flush">
         <li
-            v-for="comment in comments"
-            :key="comment.id"
+            v-for="oneComment in $data.comments"
+            :key="oneComment.id"
             class="list-group-item"
         >
           <strong>Имя пользователя: </strong>
-          {{ comment.name }}
+          {{ oneComment.name }}
           <br/>
           <strong>Комментарий: </strong>
-          {{ comment.body }}
+          {{ oneComment.body }}
         </li>
       </ul>
     </template>
   </div>
 </template>
 
-<script>
-import {fetchPosts} from "../api/fetchPosts";
-import {fetchUsers} from "../api/fetchUsers";
-import {fetchComments} from "../api/fetchComments";
-import Loader from "./Loader";
-import {addComment} from "../api/addComment";
+<script lang="ts">
+import {fetchPosts} from "@/api/fetchPosts";
+import {fetchUsers} from "@/api/fetchUsers";
+import {fetchComments} from "@/api/fetchComments";
+import Loader from "@/components/Loader.vue";
+import {addComment} from "@/api/addComment";
+import Vue from "vue";
+import {IPost} from "@/types/IPost";
+import {IUser} from "@/types/IUser";
+import {IComment} from "@/types/IComment";
+import Component from "vue-class-component";
 
-
-export default {
-  name: "Post",
+@Component({
   components: {
     Loader,
-  },
-  data() {
-    return {
-      post: [],
-      user: [],
-      comments: [],
-      comment: null,
-      loading: true,
-    }
-  },
+  }
+})
+export default class Post extends Vue {
 
-  computed: {
-    postId() {
-      const {id} = this.$route.params;
-      return +id.slice(1);
-    }
-  },
-  mounted: async function () {
+  private post?: IPost;
+  private user?: IUser;
+  private comments: IComment[] = [];
+  private comment?: IComment;
+  private loading: boolean = true;
+
+  get postId(): number {
+    const {id} = this.$route.params;
+    return +id.slice(1);
+  }
+
+  public async handleClick() {
+    this.$data.loading = true;
+    const newComment = await addComment({
+      body: this.$data.comment,
+      postId: this.postId,
+      name: 'Unknown',
+    });
+    this.$data.comment = '';
+    this.$data.comments.push(newComment);
+    this.$data.loading = false;
+  }
+
+  async mounted(): Promise<void> {
     this.$data.loading = true;
     const [posts, comments] = await Promise.all([
       fetchPosts({id: this.postId}),
@@ -77,25 +90,12 @@ export default {
     ])
     this.$data.post = posts[0];
     this.$data.comments = comments;
-
     const users = await fetchUsers({id: this.$data.post.userId});
     this.$data.user = users[0];
     this.$data.loading = false;
-  },
-  methods: {
-    async handleClick() {
-      this.$data.loading = true;
-      const newComment = await addComment({
-            body: this.$data.comment,
-            postId: this.postId,
-            name: 'Unknown',
-          });
-      this.$data.comment = '';
-      this.$data.comments.push(newComment);
-      this.$data.loading = false;
-    },
   }
 }
+
 </script>
 
 <style scoped>
